@@ -20,7 +20,7 @@ import { Head } from '@inertiajs/vue3';
                 <div
                     class="overflow-hidden bg-white shadow-sm sm:rounded-lg"
                 >
-                    <div class="p-6 text-gray-900">
+                    <div class="p-6 text-black">
                         You're logged in!
                     </div>
                 </div>

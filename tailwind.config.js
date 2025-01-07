@@ -13,7 +13,7 @@ export default {
     theme: {
             extend: {
                 colors: {
-                    dick: '#3E5879'
+                    prim: '#3E5879'
                 },
             },
         },

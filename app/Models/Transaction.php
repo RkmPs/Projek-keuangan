@@ -14,4 +14,8 @@ class Transaction extends Model
     public function categories(){
      return $this->belongsTo(Categories::class, 'categories_id');
     }
+
+    public function user(){
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

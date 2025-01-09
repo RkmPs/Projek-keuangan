@@ -14,17 +14,12 @@ import { Head } from '@inertiajs/vue3';
                 Dashboard
             </h2>
         </template>
-
-        <div class="py-12">
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                <div
-                    class="overflow-hidden bg-white shadow-sm sm:rounded-lg"
-                >
-                    <div class="p-6 text-black">
-                        You're logged in!
-                    </div>
+            <div class="bg-red-500 text-white p-4 rounded-[32px] w-64 h-35 ml-60 mt-10">
+                <div class="bg-opacity-100">
+                Saldo
                 </div>
             </div>
-        </div>
+
+        
     </AuthenticatedLayout>
 </template>

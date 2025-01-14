@@ -1,6 +1,6 @@
 <script setup>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import { Head } from "@inertiajs/vue3";
 </script>
 
 <template>
@@ -8,18 +8,14 @@ import { Head } from '@inertiajs/vue3';
 
     <AuthenticatedLayout>
         <template #header>
-            <h2
-                class="text-xl font-semibold leading-tight text-gray-800"
-            >
+            <h2 class="text-xl font-semibold leading-tight text-gray-800">
                 Dashboard
             </h2>
         </template>
-            <div class="bg-red-500 text-white p-4 rounded-[32px] w-64 h-35 ml-60 mt-10">
-                <div class="bg-opacity-100">
-                Saldo
-                </div>
-            </div>
-
-        
+        <div
+            class="bg-testiary text-white p-4 rounded-[32px] w-100 h-35 ml-60 mt-10"
+        >
+            <div class="bg-opacity-100">Saldo</div>
+        </div>
     </AuthenticatedLayout>
 </template>

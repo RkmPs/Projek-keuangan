@@ -30,7 +30,7 @@ class transaksiController extends Controller
     {
         //
         $kategori = Categories::where('user_id', auth()->user()->id)->get();
-        return Inertia::render('transaksi/create', [
+        return Inertia::render('Transaksi/create', [
             'kategori' => $kategori,
         ]);
     }

@@ -1,21 +1,21 @@
 <script setup>
-import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import GuestLayout from "@/Layouts/GuestLayout.vue";
+import InputError from "@/Components/InputError.vue";
+import InputLabel from "@/Components/InputLabel.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import TextInput from "@/Components/TextInput.vue";
+import { Head, Link, useForm } from "@inertiajs/vue3";
 
 const form = useForm({
-    name: '',
-    email: '',
-    password: '',
-    password_confirmation: '',
+    name: "",
+    email: "",
+    password: "",
+    password_confirmation: "",
 });
 
 const submit = () => {
-    form.post(route('register'), {
-        onFinish: () => form.reset('password', 'password_confirmation'),
+    form.post(route("register"), {
+        onFinish: () => form.reset("password", "password_confirmation"),
     });
 };
 </script>
@@ -57,7 +57,11 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <InputLabel class="text-white" for="password" value="Password" />
+                <InputLabel
+                    class="text-white"
+                    for="password"
+                    value="Password"
+                />
 
                 <TextInput
                     id="password"
@@ -71,7 +75,7 @@ const submit = () => {
                 <InputError class="mt-2" :message="form.errors.password" />
             </div>
 
-            <div class="mt-4 ">
+            <div class="mt-4">
                 <InputLabel
                     for="password_confirmation"
                     value="Confirm Password"
@@ -102,7 +106,7 @@ const submit = () => {
                 </Link>
 
                 <PrimaryButton
-                    class="ms-4"
+                    class="ms-4 bg-white dark:text-black text-headline hover:bg-headline hover:text-white transition duration-300 ease-in-out"
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                 >

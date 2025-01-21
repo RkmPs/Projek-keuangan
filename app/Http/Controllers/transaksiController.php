@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Auth;
+use Inertia\Inertia;
 use App\Models\AccountInfo;
 use App\Models\Transaction;
 use App\Models\Categories;
 
-class uangController extends Controller
+class transaksiController extends Controller
 {
     /**
      * Display a listing of the resource.

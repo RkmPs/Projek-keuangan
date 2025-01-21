@@ -18,7 +18,7 @@ Route::get('/', function () {
 
 Route::middleware('auth')->group(function(){
     Route::get('/dashboard', function () {return Inertia::render('Dashboard');})->name('dashboard');
-    Route::get('/transaksi/add', [transaksiController::class, 'create'])->name('transaksi.create');
+    Route::get('/transaksi/create', [transaksiController::class, 'create'])->name('transaksi.create');
 });
 
 Route::middleware('auth')->group(function (){

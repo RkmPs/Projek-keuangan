@@ -39,9 +39,12 @@ class uangController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //mengambil data user
         $user_id = auth()->user()->id;
+        $user = auth()->user();
+        $account_info = $user->accountInfo;
 
+        //validasi request
         $request->validate([
             'categories_id' => 'require|numeric',
             'amount' => 'require|numeric',
@@ -49,6 +52,7 @@ class uangController extends Controller
             'description' => 'require|text',
         ]);
 
+        //menyimpan transaksi
         $transaksi = Transaction::create([
             'user_id' => $user_id,
             'categories_id' => $request->categories_id,
@@ -56,6 +60,15 @@ class uangController extends Controller
             'type' => $request->type,
             'description' => $request->description,
         ]);
+
+        //update balance accountInfo
+        if($transaksi->type == 'income'){
+            $account_info += $transaksi->amount;
+        }elseif($transaksi->type == 'expense'){
+            $account_info -= $transaksi->amount;
+        }
+
+        $account_info->save();
 
         if($transaksi){
             return Redirect::route('transaksi.store')->with('message', 'success'); //belum diubah biar redirect yang bener
@@ -92,9 +105,23 @@ class uangController extends Controller
             'description' => $request->description,
         ]);
 
+        //update balance accountInfo
+        $user = auth()->user();
+        $account_info = $user->accountInfo;
+
+        if($transaksi->type == 'income'){
+            $account_info += $transaksi->amount;
+        }elseif($transaksi->type == 'expense'){
+            $account_info -= $transaksi->amount;
+        }
+
+        $account_info->save();
+
         if($transaksi){
             return Redirect::route('transaksi.index')->with('message', 'success'); //belum diubah biar redirect yang bener
         } 
+
+    
     }
 
     /**
@@ -104,6 +131,18 @@ class uangController extends Controller
     {
         //
         $transaksi = Transaksi::findOrFail();
+
+        $user = auth()->user();
+        $account_info = user()->accountInfo;
+
+        //mengubah balance jika transaksi dihapus
+        if ($transaction->type === 'income') {
+            $account_info->balance -= $transaction->amount;
+        } elseif ($transaction->type === 'expense') {
+            $account_info->balance += $transaction->amount;
+        }
+        $account_info->save();
+        
         $transaksi->delete();
         return Redirect::route('transaksi.index')->with('message','success');
     }

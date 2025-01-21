@@ -13,7 +13,7 @@ import { Head } from "@inertiajs/vue3";
             </h2>
         </template>
         <div
-            class="bg-testiary text-white p-4 rounded-[32px] w-100 h-35 ml-60 mt-10"
+            class="shadow-lg bg-testiary text-white p-4 rounded-[32px] w-100 h-35 ml-60 mt-10"
         >
             <div class="bg-opacity-100">Saldo</div>
         </div>

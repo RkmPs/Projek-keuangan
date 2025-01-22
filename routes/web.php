@@ -17,8 +17,13 @@ Route::get('/', function () {
 
 
 Route::middleware('auth')->group(function(){
-    Route::get('/dashboard', function () {return Inertia::render('Dashboard');})->name('dashboard');
+    Route::get('/dashboard', [transaksiController::class, 'index'])->name('dashboard');
+    Route::get('/transaksi/history', [transaksiController::class, 'history'])->name('transaksi.history');
     Route::get('/transaksi/create', [transaksiController::class, 'create'])->name('transaksi.create');
+    Route::post('/transaksi', [transaksiController::class, 'store'])->name('transaksi.store');
+    Route::get('/transaksi/{id}/edit', [transaksiController::class, 'edit'])->name('transaksi.edit');
+    Route::put('/transaksi/{id}', [transaksiController::class, 'update'])->name('transaksi.update');
+    Route::delete('/transaksi/{id}', [transaksiController::class, 'delete'])->name('transaksi.delete');
 });
 
 Route::middleware('auth')->group(function (){

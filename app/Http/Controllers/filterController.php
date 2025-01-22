@@ -12,7 +12,9 @@ class filterController extends Controller
 {
     //
 
-    public function income(){
+    public function transactionFilter(Request $request){
+        
+
         
 
     }

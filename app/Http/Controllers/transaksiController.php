@@ -8,18 +8,64 @@ use Inertia\Inertia;
 use App\Models\AccountInfo;
 use App\Models\Transaction;
 use App\Models\Categories;
+use Illuminate\Support\Carbon;
 
 class transaksiController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+
+    public function history(Request $request)
+    {
+        $query = Transaction::query();
+
+        //mengambil sesuai id
+        $query->where('user_id', auth()->user()->id());
+
+            //filter type transaksi
+            if ($request->has('type')){
+                $query->where('type', $request->type);
+            }
+
+            //filter kategori
+            if ($request->has('category_id')){
+                $query->where('category_id', $request->category_id);
+            }
+
+            //filter bulan 1 untuk januari 2 untuk februari
+            if ($request->has('month')){
+                $query->where('created_at', $request->month);
+            }
+
+            //filter tahun (ex: 2025)
+            if($request->has('year')){
+                $query->where('created_at', $request->year);
+            }
+
+            //mengatur sort by
+            $sortBy = $request->get('sort_by', 'created_at');
+            $sortOrder = $request->get('sort_order', 'desc');
+            $query->orderBy($sortBy, $sortOrder);
+
+
+        $transaksi = $query->get();
+
+        return Inertia::render('Transaksi/history', [
+            'transaksi' => $transaksi,
+        ]);
+    }
+
+
     public function index()
     {
         //
         $transaksi = Transaction::where('user_id', auth()->user()->id)->get();
+        $balance = AccountInfo::get('balance');
+
         return Inertia::render('Dashboard', [
             'transaksi' => $transaksi,
+            'balance' => $balance,
         ]);
     }
 

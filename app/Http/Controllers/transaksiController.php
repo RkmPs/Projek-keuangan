@@ -51,7 +51,7 @@ class transaksiController extends Controller
 
         $transaksi = $query->get();
 
-        return Inertia::render('Transaksi/history', [
+        return Inertia::render('Transaksi.history', [
             'transaksi' => $transaksi,
         ]);
     }
@@ -111,7 +111,9 @@ class transaksiController extends Controller
 
         //transaksi bulan ini
 
-        $montly = 0;
+        $montly = Transaction::where('user_id', auth()->user()->id)
+            ->whereMonth('created_at', Carbon::now()->month)
+            ->whereYear('created_at', Carbon::now()->year);
 
         //jumlah kategori 
 
@@ -129,7 +131,7 @@ class transaksiController extends Controller
     {
         //
         $kategori = Categories::where('user_id', auth()->user()->id)->get();
-        return Inertia::render('Transaksi/create', [
+        return Inertia::render('Transaksi.create', [
             'kategori' => $kategori,
         ]);
     }
@@ -171,7 +173,7 @@ class transaksiController extends Controller
         $account_info->save();
 
         if($transaksi){
-            return Redirect::route('transaksi.store')->with('message', 'success'); //belum diubah biar redirect yang bener
+            return Redirect::route('dashboard')->with('message', 'success'); 
         } 
     }
     /**
@@ -181,7 +183,7 @@ class transaksiController extends Controller
     {
         //
         $kategori = Categories::where('user_id', auth()->user()->id)->get();
-        return Inertia::render('transaksi/edit', [
+        return Inertia::render('transaksi.edit', [
             'kategori' => $kategori,
         ]);
     }
@@ -218,7 +220,7 @@ class transaksiController extends Controller
         $account_info->save();
 
         if($transaksi){
-            return Redirect::route('transaksi.index')->with('message', 'success'); //belum diubah biar redirect yang bener
+            return Redirect::route('Transaksi.history')->with('message', 'success'); //belum diubah biar redirect yang bener
         } 
 
     
@@ -244,6 +246,6 @@ class transaksiController extends Controller
         $account_info->save();
         
         $transaksi->delete();
-        return Redirect::route('transaksi.index')->with('message','success');
+        return Redirect::route('Transaksi.history')->with('message','success');
     }
 }

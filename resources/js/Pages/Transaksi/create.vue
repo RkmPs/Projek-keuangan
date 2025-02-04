@@ -1,4 +1,23 @@
-<script></script>
+<script setup>
+    import { Head, Link, useForm } from '@inertiajs/vue3';
+
+    defineProps({
+                kategori: Object
+            })
+
+    const form = useForm({
+        amount: '',
+        type: '',
+        categories_id: '',
+        description: '', 
+    });
+
+    console.log(form)
+
+    const submit = () => {
+        form.post(route('transaksi.store'));
+    };
+</script>
 
 <template>
     <div class="bg-main">
@@ -6,7 +25,7 @@
             <div
                 class="w-full max-w-sm p-4 bg-testiary border border-testiary rounded-lg shadow sm:p-6 md:p-8 dark:bg- dark:testiary"
             >
-                <form class="max-w-sm mx-auto">
+                <form @submit.prevent="submit" class="max-w-sm mx-auto">
                     <div class="mb-5">
                         <label
                             for="large-input"
@@ -16,6 +35,7 @@
                         <input
                             placeholder="Masukan Nominal"
                             type="text"
+                            v-model="form.amount"
                             id="large-input"
                             class="block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500 dark:bg-white dark:placeholder-gray-400 dark:text-headline dark:focus:ring-head dark:focus:border-headline"
                         />
@@ -26,30 +46,30 @@
                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                         >Tipe</label
                     >
-                    <select
-                        id="tipe"
+                    <select 
+                        id="tipe" v-model="form.type"
                         class="bg-gray-50 mb-4 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-white dark:placeholder-gray-400 dark:text-headline dark:focus:ring-headline dark:focus:border-headline transition-all focus:bg-blue-100"
                     >
-                        <option value="Pemasukan">Pemasukan</option>
-                        <option value="Pengeluaran">Pengeluaran</option>
+                        <option value="">Pilih Kategori</option>
+                        <option value="Income">Pemasukan</option>
+                        <option value="Expense">Pengeluaran</option>
                     </select>
 
-                    <form class="max-w-sm mx-auto">
                         <label
                             for="kategori"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                             >Kategori</label
                         >
                         <select
-                            id="kategori"
+                            id="kategori" v-model="form.categories_id"
                             class="bg-white mb-4 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-white dark:placeholder-gray-400 dark:text-headline dark:focus:ring-headline dark:focus:border-headline transition-all focus:bg-headline focus:text-white"
                             onanimationend="this.classList.remove('animate-ping')"
+                            
                         >
-                            <option value="Premier">Premier</option>
-                            <option value="Sekunder">Sekunder</option>
-                            <option value="Tersier">Tersier</option>
+                            <option value="">Pilih Kategori</option>
+                            <option v-for="k in kategori" :key="k.id" :value="k.id">{{ k.name }}</option>
                         </select>
-                    </form>
+
 
                     <div>
                         <label
@@ -61,6 +81,7 @@
                             placeholder="Masukan Keterangan"
                             type="text"
                             id="Keterangan"
+                            v-model="form.description"
                             class="bg-white mb-4 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-white dark:placeholder-gray-400 dark:text-headline dark:focus:ring-headline dark:focus:border-headline transition-all focus:bg-headline focus:text-white"
                         />
                     </div>

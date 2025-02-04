@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Auth;
+Use Illuminate\Support\Facades\Auth;
+Use Illuminate\Support\Facades\Redirect;
+Use App\Http\Controllers\id;
 use Inertia\Inertia;
 use App\Models\AccountInfo;
 use App\Models\Transaction;
@@ -21,7 +23,7 @@ class transaksiController extends Controller
         $query = Transaction::query();
 
         //mengambil sesuai id
-        $query->where('user_id', auth()->user()->id());
+        $query->where('user_id', Auth::id());
 
             //filter type transaksi
             if ($request->has('type')){
@@ -51,7 +53,7 @@ class transaksiController extends Controller
 
         $transaksi = $query->get();
 
-        return Inertia::render('Transaksi.history', [
+        return Inertia::render('Transaksi/history', [
             'transaksi' => $transaksi,
         ]);
     }
@@ -60,11 +62,11 @@ class transaksiController extends Controller
     public function index(Request $request)
     {
         //
-        $transaksi = Transaction::where('user_id', auth()->user()->id)->get();
+        $transaksi = Transaction::where('user_id', Auth::id());
         $balance = AccountInfo::get('balance');
 
         //total pemasukan
-        $totalIncome = Transaction::where('user_id', auth()->user()->id)
+        $totalIncome = Transaction::where('user_id', Auth::id())
             ->where('type', 'income')
             //untuk pemasukan perminggu
             ->when($request->has('this_week'), function($query){
@@ -84,7 +86,7 @@ class transaksiController extends Controller
             ->sum('amount');
 
         //total pengeluaran
-        $totalExpense = Transaction::where('user_id', auth()->user()->id)
+        $totalExpense = Transaction::where('user_id', Auth::id())
             ->where('type', 'expense')
             //untuk pengeluaran perminggu
             ->when($request->has('this_week'), function($query){
@@ -104,14 +106,14 @@ class transaksiController extends Controller
 
         //transaksi minggu ini
 
-        $weekly  = Transaction::where('user_id', auth()->user()->id)
+        $weekly  = Transaction::where('user_id', Auth::id())
             ->whereBetween('created_at', [ 
                 Carbon::now()->startOfWeek(),
                 Carbon::now()->endOfWeek()]);
 
         //transaksi bulan ini
 
-        $montly = Transaction::where('user_id', auth()->user()->id)
+        $montly = Transaction::where('user_id', Auth::id())
             ->whereMonth('created_at', Carbon::now()->month)
             ->whereYear('created_at', Carbon::now()->year);
 
@@ -130,7 +132,7 @@ class transaksiController extends Controller
     public function create()
     {
         //
-        $kategori = Categories::where('user_id', auth()->user()->id)->get();
+        $kategori = Categories::where('user_id', Auth::id())->get();
         return Inertia::render('Transaksi/create', [
             'kategori' => $kategori,
         ]);
@@ -142,16 +144,20 @@ class transaksiController extends Controller
     public function store(Request $request)
     {
         //mengambil data user
-        $user_id = auth()->user()->id;
-        $user = auth()->user();
-        $account_info = $user->accountInfo;
+        $user_id = Auth::id();
+        $account_info = AccountInfo::where('user_id', $user_id)->first();
+
+        \Log::info('Account Info Sebelum Update:', [
+            'user_id' => $user_id,
+            'balance' => $account_info->balance ?? 'NULL',
+        ]);
 
         //validasi request
         $request->validate([
-            'categories_id' => 'require|numeric',
-            'amount' => 'require|numeric',
-            'type' => 'require',
-            'description' => 'require|text',
+            'categories_id' => 'required|numeric',
+            'amount' => 'required|numeric',
+            'type' => 'required',
+            'description' => 'required|string',
         ]);
 
         //menyimpan transaksi
@@ -164,10 +170,10 @@ class transaksiController extends Controller
         ]);
 
         //update balance accountInfo
-        if($transaksi->type == 'income'){
-            $account_info += $transaksi->amount;
-        }elseif($transaksi->type == 'expense'){
-            $account_info -= $transaksi->amount;
+        if($transaksi->type == 'Income'){
+            $account_info->balance += $transaksi->amount;
+        }elseif($transaksi->type == 'Expense'){
+            $account_info->balance -= $transaksi->amount;
         }
 
         $account_info->save();
@@ -175,6 +181,8 @@ class transaksiController extends Controller
         if($transaksi){
             return Redirect::route('dashboard')->with('message', 'success'); 
         } 
+
+        
     }
     /**
      * Show the form for editing the specified resource.
@@ -182,7 +190,7 @@ class transaksiController extends Controller
     public function edit(string $id)
     {
         //
-        $kategori = Categories::where('user_id', auth()->user()->id)->get();
+        $kategori = Categories::where('user_id', Auth::id());
         return Inertia::render('Transaksi/edit', [
             'kategori' => $kategori,
         ]);
@@ -208,7 +216,7 @@ class transaksiController extends Controller
         ]);
 
         //update balance accountInfo
-        $user = auth()->user();
+        $user = Auth::user();
         $account_info = $user->accountInfo;
 
         if($transaksi->type == 'income'){
@@ -234,7 +242,7 @@ class transaksiController extends Controller
         //
         $transaksi = Transaksi::findOrFail();
 
-        $user = auth()->user();
+        $user = Auth::user();
         $account_info = user()->accountInfo;
 
         //mengubah balance jika transaksi dihapus

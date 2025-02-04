@@ -73,11 +73,12 @@ class transaksiController extends Controller
                     Carbon::now()->endOfWeek()]);
             })
             //untuk pemasukan perbulan
-            ->when($request->month, function($query, $month){
-                $query->whereMonth('created_at', Carbon::now()->month);
+            ->when($request->has('this_month'), function($query, $month){
+                $query->whereMonth('created_at', Carbon::now()->month)
+                ->whereYear('created_at', Carbon::now()->year);
             })
             //untuk pemasukan pertahun
-            ->when($request->year, function($query, $year){
+            ->when($request->has('this_year'), function($query, $year){
                 $query->whereYear('created_at', Carbon:now()->year);
             })
             ->sum('amount');

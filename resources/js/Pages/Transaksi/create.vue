@@ -19,33 +19,31 @@
                 </div>
 
                 <label
-                    for="countries_disabled"
+                    for="tipe"
                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >Tipe</label
                 >
                 <select
-                    id="countries_disabled"
+                    id="tipe"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 >
                     <option value="Pemasukan">Pemasukan</option>
                     <option value="Pengeluaran">Pengeluaran</option>
                 </select>
 
-                <
                 <form class="max-w-sm mx-auto">
                     <label
-                        for="countries"
+                        for="kategori"
                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                        >Select your country</label
+                        >Kategori</label
                     >
                     <select
-                        id="countries"
+                        id="kategori"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     >
-                        <option>United States</option>
-                        <option>Canada</option>
-                        <option>France</option>
-                        <option>Germany</option>
+                        <option value="Premier">Premier</option>
+                        <option value="Sekunder">Sekunder</option>
+                        <option value="Tersier">Tersier</option>
                     </select>
                 </form>
 

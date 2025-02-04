@@ -5,6 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use App\Models\User;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -39,6 +40,23 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
+        ]);
+    }
+
+    public function configure()
+    {
+        return $this->afterCreating(function (User $user) {
+            $user->accountInfo()->create(['balance' => 0]);
+        });
+    }
+
+    public function userAccount(){
+        return $this->state([
+            'name' => 'user',
+            'email' => 'user@user.com',
+            'email_verified_at' => now(),
+            'password' => Hash::make('testestes'),
+            'remember_token' => Str::random(10),
         ]);
     }
 }

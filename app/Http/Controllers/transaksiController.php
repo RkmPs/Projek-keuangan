@@ -131,7 +131,7 @@ class transaksiController extends Controller
     {
         //
         $kategori = Categories::where('user_id', auth()->user()->id)->get();
-        return Inertia::render('Transaksi.create', [
+        return Inertia::render('Transaksi/create', [
             'kategori' => $kategori,
         ]);
     }
@@ -183,7 +183,7 @@ class transaksiController extends Controller
     {
         //
         $kategori = Categories::where('user_id', auth()->user()->id)->get();
-        return Inertia::render('transaksi.edit', [
+        return Inertia::render('Transaksi/edit', [
             'kategori' => $kategori,
         ]);
     }
@@ -220,7 +220,7 @@ class transaksiController extends Controller
         $account_info->save();
 
         if($transaksi){
-            return Redirect::route('Transaksi.history')->with('message', 'success'); //belum diubah biar redirect yang bener
+            return Redirect::route('transaksi.history')->with('message', 'success'); //belum diubah biar redirect yang bener
         } 
 
     
@@ -246,6 +246,6 @@ class transaksiController extends Controller
         $account_info->save();
         
         $transaksi->delete();
-        return Redirect::route('Transaksi.history')->with('message','success');
+        return Redirect::route('transaksi.history')->with('message','success');
     }
 }

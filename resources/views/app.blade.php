@@ -14,6 +14,12 @@
         @routes
         @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
         @inertiaHead
+
+        <style>
+            ::-webkit-scrollbar {
+               display: none;
+            }
+        </style>
     </head>
     <body class="font-sans antialiased">
         @inertia

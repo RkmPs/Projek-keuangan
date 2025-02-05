@@ -1,6 +1,6 @@
 <script setup>
-    import { router } from "@inertiajs/vue3";
-
+    import { router, Head } from "@inertiajs/vue3";
+    import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 
     defineProps ({
         historys: Object
@@ -20,8 +20,17 @@
     };
 </script>
 
+
 <template>
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <Head title="Dashboard" />
+
+    <AuthenticatedLayout>
+        <template #header>
+            <h2 class="text-xl font-semibold leading-tight text-gray-800">
+                Dashboard
+            </h2>
+        </template>
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table class="w-full text-sm text-left text-gray-500">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
@@ -63,4 +72,5 @@
             </tbody>
         </table>
     </div>
-</template>
+    </AuthenticatedLayout>
+    </template>

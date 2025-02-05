@@ -1,6 +1,7 @@
 <script setup>
     import { Head, Link, useForm } from '@inertiajs/vue3';
     import { watchEffect } from 'vue';
+    import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue"
 
     const props = defineProps({
                 kategori: Object,
@@ -35,6 +36,15 @@
 </script>
 
 <template>
+    <Head title="Edit"/>
+
+    <AuthenticatedLayout>
+        <template #header>
+            <h2 class="text-xl font-semibold leading-tight text-gray-800">
+                Transaksi
+            </h2>
+        </template>
+
     <div class="bg-main">
         <div class="flex items-center justify-center h-screen">
             <div
@@ -112,4 +122,5 @@
             </div>
         </div>
     </div>
+</AuthenticatedLayout>
 </template>

@@ -31,16 +31,16 @@ const showingNavigationDropdown = ref(false);
                                 </NavLink>
 
                                 <NavLink
-                                    :href="route('dashboard')"
-                                    :active="route().current('dashboard')"
+                                    :href="route('transaksi.create')"
+                                    :active="route().current('transaksi.create')"
                                     class="text-white"
                                 >
                                     Transaksi
                                 </NavLink>
 
                                 <NavLink
-                                    :href="route('dashboard')"
-                                    :active="route().current('dashboard')"
+                                    :href="route('transaksi.history')"
+                                    :active="route().current('transaksi.history ')"
                                     class="text-white"
                                 >
                                     Aktivitas

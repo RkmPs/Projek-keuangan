@@ -1,5 +1,6 @@
 <script setup>
     import { Head, Link, useForm } from '@inertiajs/vue3';
+    import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 
     defineProps({
                 kategori: Object
@@ -19,7 +20,17 @@
     };
 </script>
 
+
 <template>
+    <Head title="Create"/>
+
+    <AuthenticatedLayout>
+        <template #header>
+            <h2 class="text-xl font-semibold leading-tight text-gray-800">
+                Transaksi
+            </h2>
+        </template>
+        
     <div class="bg-main">
         <div class="flex items-center justify-center h-screen">
             <div
@@ -97,4 +108,5 @@
             </div>
         </div>
     </div>
+    </AuthenticatedLayout>
 </template>

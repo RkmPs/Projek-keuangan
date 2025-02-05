@@ -43,7 +43,7 @@ const showingNavigationDropdown = ref(false);
                                 <NavLink
                                     :href="route('transaksi.history')"
                                     :active="
-                                        route().current('transaksi.history')
+                                        route().current('transaksi.history ')
                                     "
                                     class="text-white"
                                 >

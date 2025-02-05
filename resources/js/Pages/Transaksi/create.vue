@@ -1,22 +1,22 @@
 <script setup>
-    import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Head, Link, useForm } from "@inertiajs/vue3";
 
-    defineProps({
-                kategori: Object
-            })
+defineProps({
+    kategori: Object,
+});
 
-    const form = useForm({
-        amount: '',
-        type: '',
-        categories_id: '',
-        description: '', 
-    });
+const form = useForm({
+    amount: "",
+    type: "",
+    categories_id: "",
+    description: "",
+});
 
-    console.log(form)
+console.log(form);
 
-    const submit = () => {
-        form.post(route('transaksi.store'));
-    };
+const submit = () => {
+    form.post(route("transaksi.store"));
+};
 </script>
 
 <template>
@@ -46,8 +46,9 @@
                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                         >Tipe</label
                     >
-                    <select 
-                        id="tipe" v-model="form.type"
+                    <select
+                        id="tipe"
+                        v-model="form.type"
                         class="bg-gray-50 mb-4 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-white dark:placeholder-gray-400 dark:text-headline dark:focus:ring-headline dark:focus:border-headline transition-all focus:text-white focus:bg-headline"
                     >
                         <option value="">Pilih Kategori</option>
@@ -55,21 +56,22 @@
                         <option value="Expense">Pengeluaran</option>
                     </select>
 
-                        <label
-                            for="kategori"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                            >Kategori</label
-                        >
-                        <select
-                            id="kategori" v-model="form.categories_id"
-                            class="bg-white mb-4 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-white dark:placeholder-gray-400 dark:text-headline dark:focus:ring-headline dark:focus:border-headline transition-all focus:bg-headline focus:text-white"
-                            onanimationend="this.classList.remove('animate-ping')"
-                            
-                        >
-                            <option value="">Pilih Kategori</option>
-                            <option v-for="k in kategori" :key="k.id" :value="k.id">{{ k.name }}</option>
-                        </select>
-
+                    <label
+                        for="kategori"
+                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                        >Kategori</label
+                    >
+                    <select
+                        id="kategori"
+                        v-model="form.categories_id"
+                        class="bg-white mb-4 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-white dark:placeholder-gray-400 dark:text-headline dark:focus:ring-headline dark:focus:border-headline transition-all focus:bg-headline focus:text-white"
+                        onanimationend="this.classList.remove('animate-ping')"
+                    >
+                        <option value="">Pilih Kategori</option>
+                        <option v-for="k in kategori" :key="k.id" :value="k.id">
+                            {{ k.name }}
+                        </option>
+                    </select>
 
                     <div>
                         <label

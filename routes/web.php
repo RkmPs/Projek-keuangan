@@ -23,7 +23,7 @@ Route::middleware('auth')->group(function(){
     Route::post('/transaksi', [transaksiController::class, 'store'])->name('transaksi.store');
     Route::get('/transaksi/{id}/edit', [transaksiController::class, 'edit'])->name('transaksi.edit');
     Route::put('/transaksi/{id}', [transaksiController::class, 'update'])->name('transaksi.update');
-    Route::delete('/transaksi/{id}', [transaksiController::class, 'delete'])->name('transaksi.delete');
+    Route::delete('/transaksi/{id}', [transaksiController::class, 'destroy'])->name('transaksi.delete');
 });
 
 Route::middleware('auth')->group(function (){

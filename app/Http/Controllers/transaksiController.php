@@ -20,10 +20,8 @@ class transaksiController extends Controller
 
     public function history(Request $request)
     {
-        $query = Transaction::query();
-
-        //mengambil sesuai id
-        $query->where('user_id', Auth::id());
+        $query = Transaction::with('Categories')
+        ->where('user_id', Auth::id());      //mengambil sesuai id
 
             //filter type transaksi
             if ($request->has('type')){
@@ -54,7 +52,7 @@ class transaksiController extends Controller
         $transaksi = $query->get();
 
         return Inertia::render('Transaksi/history', [
-            'transaksi' => $transaksi,
+            'historys' => $transaksi,
         ]);
     }
 
@@ -247,10 +245,10 @@ class transaksiController extends Controller
     public function destroy(string $id)
     {
         //
-        $transaksi = Transaksi::findOrFail();
+        $transaction = Transaction::findOrFail($id);
 
-        $user = Auth::user();
-        $account_info = user()->accountInfo;
+        $user_id = Auth::id();
+        $account_info = AccountInfo::where('user_id', $user_id)->first();
 
         //mengubah balance jika transaksi dihapus
         if ($transaction->type === 'Income') {
@@ -260,7 +258,7 @@ class transaksiController extends Controller
         }
         $account_info->save();
         
-        $transaksi->delete();
+        $transaction->delete();
         return Redirect::route('transaksi.history')->with('message','success');
     }
 }

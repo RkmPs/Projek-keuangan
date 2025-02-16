@@ -32,7 +32,9 @@ const showingNavigationDropdown = ref(false);
 
                                 <NavLink
                                     :href="route('transaksi.create')"
-                                    :active="route().current('transaksi.create')"
+                                    :active="
+                                        route().current('transaksi.create')
+                                    "
                                     class="text-white"
                                 >
                                     Transaksi
@@ -40,7 +42,9 @@ const showingNavigationDropdown = ref(false);
 
                                 <NavLink
                                     :href="route('transaksi.history')"
-                                    :active="route().current('transaksi.history ')"
+                                    :active="
+                                        route().current('transaksi.history ')
+                                    "
                                     class="text-white"
                                 >
                                     Aktivitas

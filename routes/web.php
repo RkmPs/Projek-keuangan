@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\transaksiController;
+use App\Http\Controllers\chartController;
 use Inertia\Inertia;
 
 Route::get('/', function () {
@@ -17,6 +18,12 @@ Route::get('/', function () {
 
 
 Route::middleware('auth')->group(function(){
+
+    //chart data
+    Route::get('/tes-chart', [chartController::class, 'testChart']);
+    Route::get('/chart-data', [chartController::class, 'getChartData'])->name('chart-data');
+
+
     Route::get('/dashboard', [transaksiController::class, 'index'])->name('dashboard');
     Route::get('/transaksi/history', [transaksiController::class, 'history'])->name('transaksi.history');
     Route::get('/transaksi/create', [transaksiController::class, 'create'])->name('transaksi.create');

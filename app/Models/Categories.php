@@ -9,7 +9,7 @@ class categories extends Model
 {
     //
     protected $fillable = [
-        'name', 'type'
+       'user_id','name', 'type'
     ];
 
     public function transactions(){

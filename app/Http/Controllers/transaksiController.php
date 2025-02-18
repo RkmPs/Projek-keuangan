@@ -145,11 +145,6 @@ class transaksiController extends Controller
         $user_id = Auth::id();
         $account_info = AccountInfo::where('user_id', $user_id);
 
-        \Log::info('Account Info Sebelum Update:', [
-            'user_id' => $user_id,
-            'balance' => $account_info->balance ?? 'NULL',
-        ]);
-
         //validasi request
         $request->validate([
             'categories_id' => 'required|numeric',

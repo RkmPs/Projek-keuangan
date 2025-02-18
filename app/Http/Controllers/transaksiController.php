@@ -121,6 +121,10 @@ class transaksiController extends Controller
         return Inertia::render('Dashboard', [
             'transaksi' => $transaksi,
             'balance' => $balance,
+            'totalIncome' => $totalIncome,
+            'totalExpense' => $totalExpense,
+            'weekly' => $weekly,
+            'montly' => $montly,
         ]);
     }
 

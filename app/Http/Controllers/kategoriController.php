@@ -79,8 +79,12 @@ class kategoriController extends Controller
             'type' => $request->type,
         ]);
 
-        return Redirect::route('kategori');
+        if($categories){
+            return Redirect::route('kategori');
+        }
     }
+
+       
 
     /**
      * Remove the specified resource from storage.

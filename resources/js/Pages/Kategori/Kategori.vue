@@ -43,14 +43,16 @@
             </h2>
         </template>
 
-        <div class="py-12">
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <div class="py-16">
+            <div class="mx-auto max-w-6xl sm:px-6 lg:px-8">
                 <div
-                    class="overflow-hidden bg-white shadow-sm sm:rounded-lg"
+                    class="overflow-hidden bg-white shadow-sm sm:rounded-3xl"
                 >
                     <div class="p-6 text-gray-900">
+
+                        <h1 class="py-4 px-8 text-xl font-semibold"> Kategori </h1>
     
-                    <form @submit.prevent="submit" class="max-w-3xl mx-auto">
+                    <form @submit.prevent="submit" class="max-w-4xl mx-auto">
 
 
                         <div class="py-3">

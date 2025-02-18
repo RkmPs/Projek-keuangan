@@ -103,7 +103,7 @@
                                 
                                 <div class="flex items-center justify-between">
                                     <a 
-                                        href="/link-ke-form-kategori" 
+                                        href="/kategori" 
                                         class="text-headline hover:text-blue-700 text-sm flex items-center"
                                     >
                                         <span class="mr-1">+</span>

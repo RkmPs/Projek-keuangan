@@ -43,7 +43,7 @@
             </h2>
         </template>
 
-        <div class="py-16">
+        <div class="py-12">
             <div class="mx-auto max-w-6xl sm:px-6 lg:px-8">
                 <div
                     class="overflow-hidden bg-white shadow-sm sm:rounded-3xl"
@@ -103,15 +103,15 @@
             </div>
         </div>
 
-        <div class="py-12">
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <div class="py-6">
+            <div class="mx-auto max-w-6xl sm:px-6 lg:px-8">
                 <div
                     class="overflow-hidden bg-white shadow-sm sm:rounded-lg"
                 >
 
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <table class="w-full text-sm text-left rtl:text-right text-headline dark:text-gray-400">
+                        <thead class="text-xs text-headline uppercase bg-gray-200">
                             <tr>
                                 <th scope="col" class="px-6 py-3">
                                     Nama Kategori
@@ -126,7 +126,7 @@
                         </thead>
                         <tbody>
 
-                            <tr  v-for="category in categories" :key="category.id" class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
+                            <tr  v-for="category in categories" :key="category.id" class="odd:bg-cardbg even:bg-gray-100 border-b border-gray-200 text-headline">
                                 <td class="px-6 py-4">
                                     {{ category.name }}
                                 </td>
@@ -135,7 +135,7 @@
                                     {{ category.type }}
                                 </td>
 
-                                <td class="text-center">
+                                <td>
                                     <button
                                         @click="update(category.id)"
                                         class="text-blue-600 hover:underline me-2"

@@ -4,6 +4,8 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\transaksiController;
+use App\Http\Controllers\dashboardController;
+use App\Http\Controllers\historyController;
 use App\Http\Controllers\chartController;
 use App\Http\Controllers\kategoriController;
 use Inertia\Inertia;
@@ -32,10 +34,12 @@ Route::middleware('auth')->group(function(){
     Route::delete('/kategori/{id}', [kategoriController::class, 'destroy'])->name('kategori.delete');
 
     //Dashboard
-    Route::get('/dashboard', [transaksiController::class, 'index'])->name('dashboard');
-    
+    Route::get('/dashboard', [dashboardController::class, 'index'])->name('dashboard');
+
+    //history
+    Route::get('/transaksi/history', [historyController::class, 'index'])->name('transaksi.history');
+
     //Transaksi
-    Route::get('/transaksi/history', [transaksiController::class, 'history'])->name('transaksi.history');
     Route::get('/transaksi/create', [transaksiController::class, 'create'])->name('transaksi.create');
     Route::post('/transaksi', [transaksiController::class, 'store'])->name('transaksi.store');
     Route::get('/transaksi/{id}/edit', [transaksiController::class, 'edit'])->name('transaksi.edit');

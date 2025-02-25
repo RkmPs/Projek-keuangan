@@ -16,8 +16,9 @@ export default {
                 main: "#b8c1ec",
                 bg: "#d4d8f0",
                 headline: "#232946",
-                cardbg: "##fffffe",
+                cardbg: "#fffffe",
                 testiary: "#eebbc3",
+                paragraph: "#b8c1ec"
             },
         },
     },

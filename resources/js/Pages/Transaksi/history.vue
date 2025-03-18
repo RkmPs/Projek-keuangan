@@ -10,7 +10,6 @@ const props = defineProps({
     categories: Object,
 });
 
-console.log(props.categories)
 //Memformat data agar lebih user friendly
 const formattedHistorys = computed(() => {
     return props.historys.data.map(history => ({
@@ -27,7 +26,6 @@ const formatCurrency = (value) => {
         minimumFractionDigits: 0,
     }).format(value)
 };
-console.log(formatCurrency(history.amount))
 
 //paginate
 const goToPage = (url) => {
@@ -42,6 +40,8 @@ const filters = ref({
     categories_id: '',
     month: '',
     year: '',
+    sort_by: 'created_at',
+    sort_order: 'desc',
 })
 
 //watch untuk mengirim request otomatis
@@ -94,7 +94,21 @@ const deleteHistory = (id) => {
 
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg py-3 ">
             <div class="py-6">
-            <div class="mx-auto max-w-7xl shadow-2xl">button ssortby
+            <div class="mx-auto max-w-7xl shadow-2xl">
+
+                <!-- Dropdown Sort By -->
+        <div class="flex items-center gap-2">
+            <label class="text-sm font-medium">Sort By:</label>
+            <select v-model="filters.sort_by" @change="applySort" class="border px-2 py-1 rounded">
+                <option value="created_at">Tanggal</option>
+                <option value="amount">Nominal</option>
+            </select>
+
+            <button @click="toggleSortOrder" class="px-3 py-1 border rounded bg-gray-200 hover:bg-gray-300">
+                {{ filters.sort_order === 'asc' ? '⬆️ Asc' : '⬇️ Desc' }}
+            </button>
+        </div>
+
                 <div
                     class="overflow-hidden bg-white shadow-sm sm:rounded-lg"
                 >

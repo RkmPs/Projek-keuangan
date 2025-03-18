@@ -3,6 +3,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { ref, onMounted } from "vue";
 import { Head } from "@inertiajs/vue3";
 import LineChart from "@/Components/LineChart.vue";
+import feather from "feather-icons";
 
 defineProps({
     transaksi: Object,
@@ -32,8 +33,16 @@ const loadChartData = async () => {
     }
 };
 
+const cameraIcon = feather.icons.camera.toSvg({
+    width: "24",
+    height: "24",
+    stroke: "black",
+    "stroke-width": "1.5",
+});
+
 onMounted(() => {
     loadChartData();
+    feather.replace();
 });
 </script>
 
@@ -50,6 +59,8 @@ onMounted(() => {
             <div
                 class="flex space-x-20 shadow-lg bg-white text-headline p-4 rounded-[32px] w-2/3 h-14 mt-10"
             >
+                <span v-html="cameraIcon" class="inline-block"></span>
+
                 <div class="ml-4 font-bold">Saldo</div>
                 <div class="text-blue-500">
                     {{ balance[balance.length - 1]?.balance }}

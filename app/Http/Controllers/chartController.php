@@ -62,11 +62,47 @@ class chartController extends Controller
     }
 
     // **Data untuk Pie Chart (Total Dana per Kategori)**
-    public function getPieChartData()
+    public function getExpenseData()
     {
         $transactions = Transaction::selectRaw('categories_id, SUM(amount) as total')
             ->where('user_id', Auth::id())
             ->where('type', 'Expense') // Hanya menampilkan pengeluaran
+            ->groupBy('categories_id')
+            ->get();
+
+        $labels = [];
+        $data = [];
+        $backgroundColors = [];
+
+        foreach ($transactions as $transaction) {
+            $category = Categories::find($transaction->categories_id);
+            if ($category) {
+                $labels[] = $category->name;
+                $data[] = $transaction->total;
+                $backgroundColors[] = '#' . substr(md5(rand()), 0, 6); // Warna random untuk tiap kategori
+            }
+        }
+
+        $pieChartData = [
+            'labels' => $labels,
+            'datasets' => [
+                [
+                    'data' => $data,
+                    'backgroundColor' => $backgroundColors,
+                    'borderColor' => '#ffffff',
+                    'borderWidth' => 2
+                ]
+            ]
+        ];
+
+        return response()->json(['pieChartData' => $pieChartData]);
+    }
+
+    public function getIncomeData()
+    {
+        $transactions = Transaction::selectRaw('categories_id, SUM(amount) as total')
+            ->where('user_id', Auth::id())
+            ->where('type', 'Income') // Hanya menampilkan pengeluaran
             ->groupBy('categories_id')
             ->get();
 

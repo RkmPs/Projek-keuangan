@@ -1,7 +1,7 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { ref, onMounted, nextTick } from "vue";
-import { Head } from "@inertiajs/vue3";
+import { ref, onMounted, nextTick, watch } from "vue";
+import { Head, router } from "@inertiajs/vue3";
 import LineChart from "@/Components/LineChart.vue";
 import PieChart from "@/Components/PieChart.vue";
 import axios from "axios";
@@ -9,7 +9,7 @@ import feather from "feather-icons";
 
 defineProps({
     transaksi: Object,
-    balance: Array,
+    balance: Number,
     totalIncome: Number,
     totalExpense: Number,
     weekly: Number,
@@ -21,7 +21,11 @@ const chartData = ref({
     datasets: [],
 });
 
-const pieChartData = ref({
+const incomeData = ref({
+    labels: [],
+    datasets: [],
+});
+const expenseData = ref({
     labels: [],
     datasets: [],
 });
@@ -47,8 +51,13 @@ const loadChartData = async () => {
             ],
         };
 
-        const pieResponse = await axios.get("/pie-chart-data");
-        pieChartData.value = pieResponse.data.pieChartData || {
+        const pieResponse1 = await axios.get("/expense-data");
+        expenseData.value = pieResponse1.data.pieChartData || {
+            labels: [],
+            datasets: [],
+        };
+        const pieResponse2 = await axios.get("/income-data");
+        incomeData.value = pieResponse2.data.pieChartData || {
             labels: [],
             datasets: [],
         };
@@ -58,13 +67,33 @@ const loadChartData = async () => {
     }
 };
 
-const cameraIcon = feather.icons.camera.toSvg({
-    width: "24",
-    height: "24",
-    stroke: "black",
-    "stroke-width": "1.5",
-});
+//memformat nominal
+const formatCurrency = (value) => {
+    return new Intl.NumberFormat({
+        minimumFractionDigits: 0
+    }).format(value);
+};
 
+const filters = ref({
+    filter: 'monthly'
+})
+
+//watch untuk mengirim request otomatis
+watch(
+    () => filters.value.filter,
+    (newFilter) => {
+        router.get(
+            "/dashboard",
+            { filter: newFilter },
+            {
+                preserveState: true,
+                preserveScroll: true,
+                replace: true 
+            }
+        );
+    },
+    { immediate: true } 
+);
 onMounted(async () => {
     await nextTick();
     loadChartData();
@@ -89,16 +118,16 @@ onMounted(async () => {
 
                 <div class="ml-14 font-bold">Saldo</div>
                 <div class=" relative text-blue-500">
-                    <span class="absolute text-black text-xs -top-2 right-14 opacity-50">Rp</span>
-                    {{ balance?.[balance.length - 1]?.balance || "Rp 0" }}
+                    <span class="absolute text-black text-xs -top-2 right-16 opacity-50">Rp</span>
+                    {{ formatCurrency(balance) }}
                 </div>
 
                 <div class="border-l border-gray-300 h-full"></div>
                 <div class="flex items-center space-x-7">
                     <div class="font-bold">Income</div>
                     <div class="relative text-green-500">
-                        <span class="absolute text-black text-xs -top-2 right-14 opacity-50">Rp</span>
-                        {{ totalExpense }}
+                        <span class="absolute text-black text-xs -top-2 right-16 opacity-50">Rp</span>
+                        {{ formatCurrency(totalIncome) }}
                     </div>
 
                     <select
@@ -114,15 +143,17 @@ onMounted(async () => {
                 <div class="flex items-center space-x-7">
                     <div class="font-bold">Expense</div>
                     <div class="relative text-red-500">
-                        <span class="absolute text-black text-xs -top-2 right-14 opacity-50">Rp</span>
-                        {{ totalExpense }}
+                        <span class="absolute text-black text-xs -top-2 right-16 opacity-50">Rp</span>
+                        {{ formatCurrency(totalExpense) }}
                     </div>
 
                     <select
                         class="border-none outline-none focus:ring-0 focus:border-transparent w-6 h-6"
+                        v-model="filters.filter"
                     >
-                        <option value="all">Mingguan</option>
-                        <option value="in">Bulanan</option>
+                        <option value="monthly">Bulanan</option>
+                        <option value="weekly">Mingguan</option>
+                        <option value="">Semua waktu</option>
                     </select>
                 </div>
             </div>
@@ -149,12 +180,12 @@ onMounted(async () => {
                         <div class="flex flex-row justify-center space-x-36 mb-10">
                             <div class="flex flex-col items-center rounded-3xl shadow-lg mb-5 w-1/3">
                                 <h2 class="text-lg font-semibold mb-2 text-center">Pemasukan</h2>
-                                <PieChart :pie-chart-data="pieChartData" />
+                                <PieChart :pie-chart-data="incomeData" />
                             </div>
                                 
                             <div class="flex flex-col items-center rounded-3xl shadow-lg mb-5 w-1/3">
                                 <h2 class="text-lg font-semibold mb-2 text-center">Pengeluaran</h2>
-                                <PieChart :pie-chart-data="pieChartData" />
+                                <PieChart :pie-chart-data="expenseData" />
                             </div>
 
                         </div>

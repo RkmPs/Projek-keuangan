@@ -144,7 +144,6 @@ const submit = () => {
                                     class="bg-gray-50 border mt-1 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-white dark:placeholder-gray-400 dark:text-headline dark:focus:ring-headline dark:focus:border-headline transition-all focus:text-white focus:bg-headline"
                                     v-model="form.description"
                                     placeholder="Deskripsi Transaksi"
-                                    autofocus
                                     autocomplete="name"
                                 />
 

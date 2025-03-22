@@ -25,7 +25,8 @@ Route::middleware('auth')->group(function(){
     //Chart data
     Route::get('/tes-chart', [chartController::class, 'testChart']);
     Route::get('/chart-data', [chartController::class, 'getChartData'])->name('chart-data');
-    Route::get('/pie-chart-data', [chartController::class, 'getPieChartData'])->name('pie-chart-data');
+    Route::get('/expense-data', [chartController::class, 'getExpenseData'])->name('expense-data');
+    Route::get('/income-data', [chartController::class, 'getIncomeData'])->name('income-data');
 
     //Kategori
     Route::get('/kategori', [kategoriController::class, 'create'])->name('kategori');

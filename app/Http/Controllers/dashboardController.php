@@ -18,25 +18,23 @@ class dashboardController extends Controller
     {
         //
         $transaksi = Transaction::where('user_id', Auth::id());
-        $balance = AccountInfo::get('balance');
+        $balance = AccountInfo::where('user_id', Auth::id())->value('balance');
+
+        $filterType = $request->input('filter', 'monthly');
 
         //total pemasukan
         $totalIncome = Transaction::where('user_id', Auth::id())
             ->where('type', 'income')
-            //untuk pemasukan perminggu
-            ->when($request->has('this_week'), function($query){
+            //untuk pengeluaran perminggu
+            ->when($filterType === 'weekly', function($query){
                 $query->whereBetween('created_at', [ 
                     Carbon::now()->startOfWeek(),
                     Carbon::now()->endOfWeek()]);
             })
             //untuk pemasukan perbulan
-            ->when($request->has('this_month'), function($query, $month){
+            ->when($filterType === 'monthly', function($query){
                 $query->whereMonth('created_at', Carbon::now()->month)
                 ->whereYear('created_at', Carbon::now()->year);
-            })
-            //untuk pemasukan pertahun
-            ->when($request->has('this_year'), function($query, $year){
-                $query->whereYear('created_at', Carbon:now()->year);
             })
             ->sum('amount');
 
@@ -44,44 +42,23 @@ class dashboardController extends Controller
         $totalExpense = Transaction::where('user_id', Auth::id())
             ->where('type', 'expense')
             //untuk pengeluaran perminggu
-            ->when($request->has('this_week'), function($query){
-                $query->whereBetween('created_at', [ 
+            ->when($filterType === 'weekly', function($query) {
+                $query->whereBetween('created_at', [
                     Carbon::now()->startOfWeek(),
-                    Carbon::now()->endOfWeek()]);
+                    Carbon::now()->endOfWeek()
+                ]);
             })
-            //untuk pemasukan perbulan
-            ->when($request->month, function($query, $month){
-                $query->whereMonth('created_at', $month);
-            })
-            //untuk pemasukan pertahun
-            ->when($request->year, function($query, $year){
-                $query->whereYear('created_at', $year);
+            ->when($filterType === 'monthly', function($query) {
+                $query->whereMonth('created_at', Carbon::now()->month)
+                      ->whereYear('created_at', Carbon::now()->year);
             })
             ->sum('amount');
-
-        //transaksi minggu ini
-
-        $weekly  = Transaction::where('user_id', Auth::id())
-            ->whereBetween('created_at', [ 
-                Carbon::now()->startOfWeek(),
-                Carbon::now()->endOfWeek()]);
-
-        //transaksi bulan ini
-
-        $montly = Transaction::where('user_id', Auth::id())
-            ->whereMonth('created_at', Carbon::now()->month)
-            ->whereYear('created_at', Carbon::now()->year);
-
-        //jumlah kategori 
-
 
         return Inertia::render('Dashboard', [
             'transaksi' => $transaksi,
             'balance' => $balance,
             'totalIncome' => $totalIncome,
             'totalExpense' => $totalExpense,
-            'weekly' => $weekly,
-            'montly' => $montly,
         ]);
     }
 }

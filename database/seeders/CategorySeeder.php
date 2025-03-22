@@ -18,7 +18,7 @@ class CategorySeeder extends Seeder
     {
         //
         $users = User::all();
-        $incomeCategories = ['Salary', 'Bonus', 'Freelance'];
+        $incomeCategories = ['Salary', 'Bonus', 'Freelance', 'Deposito', 'Royalti', 'Uang Kaget'];
         $expenseCategories = ['Rent', 'Food', 'Transport', 'Utilities', 'Entertainment'];
 
         foreach ($users as $user) {

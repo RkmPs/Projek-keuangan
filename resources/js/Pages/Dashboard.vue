@@ -1,13 +1,15 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, nextTick } from "vue";
 import { Head } from "@inertiajs/vue3";
 import LineChart from "@/Components/LineChart.vue";
+import PieChart from "@/Components/PieChart.vue";
+import axios from "axios";
 import feather from "feather-icons";
 
 defineProps({
     transaksi: Object,
-    balance: Number,
+    balance: Array,
     totalIncome: Number,
     totalExpense: Number,
     weekly: Number,
@@ -15,6 +17,11 @@ defineProps({
 });
 
 const chartData = ref({
+    labels: [],
+    datasets: [],
+});
+
+const pieChartData = ref({
     labels: [],
     datasets: [],
 });
@@ -27,7 +34,25 @@ const chartOptions = ref({
 const loadChartData = async () => {
     try {
         const response = await axios.get("/chart-data");
-        chartData.value = response.data.chartData;
+        chartData.value = response.data.chartData || {
+            labels: [],
+            datasets: [
+                {
+                    label: "Saldo",
+                    data: [],
+                    backgroundColor: "rgba(54, 162, 235, 0.5)",
+                    borderColor: "rgba(54, 162, 235, 1)",
+                    borderWidth: 1,
+                },
+            ],
+        };
+
+        const pieResponse = await axios.get("/pie-chart-data");
+        pieChartData.value = pieResponse.data.pieChartData || {
+            labels: [],
+            datasets: [],
+        };
+
     } catch (error) {
         console.error("Error saat mengambil chart data:", error);
     }
@@ -40,7 +65,8 @@ const cameraIcon = feather.icons.camera.toSvg({
     "stroke-width": "1.5",
 });
 
-onMounted(() => {
+onMounted(async () => {
+    await nextTick();
     loadChartData();
     feather.replace();
 });
@@ -55,22 +81,26 @@ onMounted(() => {
                 Dashboard
             </h2>
         </template>
+
         <div class="flex justify-center">
             <div
-                class="flex space-x-20 shadow-lg bg-white text-headline p-4 rounded-[32px] w-2/3 h-14 mt-10"
+                class="flex space-x-16 shadow-lg bg-white text-headline p-4 rounded-[32px] w-2/3 h-14 mt-10"
             >
-                <span v-html="cameraIcon" class="inline-block"></span>
 
-                <div class="ml-4 font-bold">Saldo</div>
-                <div class="text-blue-500">
-                    {{ balance[balance.length - 1]?.balance }}
+                <div class="ml-14 font-bold">Saldo</div>
+                <div class=" relative text-blue-500">
+                    <span class="absolute text-black text-xs -top-2 right-14 opacity-50">Rp</span>
+                    {{ balance?.[balance.length - 1]?.balance || "Rp 0" }}
                 </div>
 
                 <div class="border-l border-gray-300 h-full"></div>
-
-                <div class="flex items-center space-x-6">
+                <div class="flex items-center space-x-7">
                     <div class="font-bold">Income</div>
-                    <div class="text-green-500">{{ totalIncome }}</div>
+                    <div class="relative text-green-500">
+                        <span class="absolute text-black text-xs -top-2 right-14 opacity-50">Rp</span>
+                        {{ totalExpense }}
+                    </div>
+
                     <select
                         class="border-none outline-none focus:ring-0 focus:border-transparent w-6 h-6"
                     >
@@ -81,9 +111,13 @@ onMounted(() => {
 
                 <div class="border-l border-gray-300 h-full"></div>
 
-                <div class="flex items-center space-x-6">
+                <div class="flex items-center space-x-7">
                     <div class="font-bold">Expense</div>
-                    <div class="text-red-500">{{ totalExpense }}</div>
+                    <div class="relative text-red-500">
+                        <span class="absolute text-black text-xs -top-2 right-14 opacity-50">Rp</span>
+                        {{ totalExpense }}
+                    </div>
+
                     <select
                         class="border-none outline-none focus:ring-0 focus:border-transparent w-6 h-6"
                     >
@@ -96,19 +130,33 @@ onMounted(() => {
 
         <div class="py-12">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900">
-                        <div class="flex justify-center mb-">
-                            <div class="p-6 bg-white rounded-lg shadow w-3/4">
+                        <div class="flex justify-center">
+                            <div class="p-6 bg-white rounded-lg shadow-lg mb-10 w-full">
                                 <h2
                                     class="text-xl font-semibold mb-4 text-center"
                                 >
                                     Sales Chart
                                 </h2>
-                                <div class="chart-container h-96">
+                                <div class="chart-container h-80 w-full">
                                     <LineChart :chart-data="chartData" />
                                 </div>
                             </div>
+                        </div>
+
+                        <div class="flex flex-row justify-center space-x-36 mb-10">
+                            <div class="flex flex-col items-center rounded-3xl shadow-lg mb-5 w-1/3">
+                                <h2 class="text-lg font-semibold mb-2 text-center">Pemasukan</h2>
+                                <PieChart :pie-chart-data="pieChartData" />
+                            </div>
+                                
+                            <div class="flex flex-col items-center rounded-3xl shadow-lg mb-5 w-1/3">
+                                <h2 class="text-lg font-semibold mb-2 text-center">Pengeluaran</h2>
+                                <PieChart :pie-chart-data="pieChartData" />
+                            </div>
+
                         </div>
                     </div>
                 </div>

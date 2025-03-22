@@ -117,15 +117,21 @@ const deleteHistory = (id) => {
             <div class="mx-auto max-w-7xl shadow-2xl">
 
                 <!-- Dropdown Sort By -->
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2 mb-2">
             <label class="text-sm font-medium">Sort By:</label>
-            <select v-model="filters.sort_by" @change="applySort" class="border px-2 py-1 rounded">
+
+            <select v-model="filters.sort_by" @change="applySort" class="px-7 py-1 rounded">
                 <option value="created_at">Tanggal</option>
                 <option value="amount">Nominal</option>
             </select>
 
+            <select v-model="filters.sort_by" @change="applySort" class="px-7 py-1 rounded">
+                <option value="created_at">Asc</option>
+                <option value="amount">Desc</option>
+            </select>
+
             <button @click="toggleSortOrder" class="px-3 py-1 border rounded bg-gray-200 hover:bg-gray-300">
-                {{ filters.sort_order === 'asc' ? '⬆️ Asc' : '⬇️ Desc' }}
+                {{ filters.sort_order === 'asc' ? 'Asc' : 'Desc' }}
             </button>
         </div>
 
@@ -241,7 +247,7 @@ const deleteHistory = (id) => {
                         v-html="link.label"
                         class="px-4 py-2 border rounded-md"
                         :class="{
-                            'bg-indigo-600 text-white': link.active,
+                            'bg-headline text-white': link.active,
                             'text-gray-700 hover:bg-gray-200': !link.active,
                         }"
                         :disabled="!link.url"

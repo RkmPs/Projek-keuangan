@@ -115,14 +115,12 @@ const submit = () => {
                                             </option>
                                         </select>
 
-                                        <div
-                                            class="flex items-center justify-between"
-                                        >
+                                        <div class="flex items-center justify-between">
                                             <a
                                                 href="/kategori"
-                                                class="text-headline hover:text-blue-700 text-sm flex items-center"
+                                                class="text-headline text-lg flex items-center rounded-lg "
                                             >
-                                                <span class="mr-1">+</span>
+                                                <span class="w-6 text-center ">+</span>
                                             </a>
                                         </div>
 

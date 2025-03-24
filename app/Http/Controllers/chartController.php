@@ -11,15 +11,11 @@ use Illuminate\Support\Carbon;
 
 class chartController extends Controller
 {
-    // Menampilkan halaman chart
-    public function testChart()
-    {
-        return Inertia::render('chart');
-    }
-
-    // **Data untuk Line Chart (Pemasukan & Pengeluaran Bulanan)**
+    
+    //Data untuk Line Chart (Pemasukan & Pengeluaran Bulanan)**
     public function getChartData()
     {
+        //mengelompokkan data berdasarkan bulan dan menghitung total jumlah (amount) di setiap bulan
         $transactions = Transaction::selectRaw('MONTH(created_at) as month, SUM(amount) as total, type')
             ->where('user_id', Auth::id())
             ->groupBy('month', 'type')
@@ -61,12 +57,26 @@ class chartController extends Controller
         return response()->json(['chartData' => $chartData]);
     }
 
-    // **Data untuk Pie Chart (Total Dana per Kategori)**
-    public function getExpenseData()
+    //Data untuk Pie Chart (Total Dana per Kategori (Expense))
+    public function getExpenseData(Request $request)
     {
+        $filterType = $request->input('filter', 'monthly');
+
+        //sama seperti income, mengelompokkan data berdasarkan kategori dan menghitung total jumlah (amount) di setiap kategori
         $transactions = Transaction::selectRaw('categories_id, SUM(amount) as total')
             ->where('user_id', Auth::id())
             ->where('type', 'Expense') // Hanya menampilkan pengeluaran
+            // Filter
+            ->when($filterType === 'weekly', function ($query) {
+                $query->whereBetween('created_at', [
+                    Carbon::now()->startOfWeek(),
+                    Carbon::now()->endOfWeek()
+                ]);
+            })
+            ->when($filterType === 'monthly', function ($query) {
+                $query->whereMonth('created_at', Carbon::now()->month)
+                    ->whereYear('created_at', Carbon::now()->year);
+            })
             ->groupBy('categories_id')
             ->get();
 
@@ -98,11 +108,26 @@ class chartController extends Controller
         return response()->json(['pieChartData' => $pieChartData]);
     }
 
-    public function getIncomeData()
+    //Data untuk Pie Chart (Total Dana per Kategori (Income))
+    public function getIncomeData(Request $request)
     {
+        $filterType = $request->input('filter', 'monthly');
+
+        //sama seperti expense, namun sekarang untuk income
         $transactions = Transaction::selectRaw('categories_id, SUM(amount) as total')
             ->where('user_id', Auth::id())
-            ->where('type', 'Income') // Hanya menampilkan pengeluaran
+            ->where('type', 'Income') // Hanya menampilkan pemasukan
+             // Filter
+             ->when($filterType === 'weekly', function ($query) {
+                $query->whereBetween('created_at', [
+                    Carbon::now()->startOfWeek(),
+                    Carbon::now()->endOfWeek()
+                ]);
+            })
+            ->when($filterType === 'monthly', function ($query) {
+                $query->whereMonth('created_at', Carbon::now()->month)
+                    ->whereYear('created_at', Carbon::now()->year);
+            })
             ->groupBy('categories_id')
             ->get();
 

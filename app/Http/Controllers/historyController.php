@@ -17,6 +17,17 @@ class historyController extends Controller
     {
         $categories = Categories::where('user_id', Auth::id())->get();
 
+        // Ambil tahun pertama transaksi user
+        $earliest_year = Transaction::where('user_id', Auth::id())
+        ->selectRaw('YEAR(MIN(created_at)) as year')
+        ->value('year');
+
+        // Generate array tahun dari tahun pertama transaksi hingga tahun sekarang
+        $current_year = now()->year;
+        $years = $earliest_year 
+            ? range($earliest_year, $current_year)
+            : [$current_year]; // Fallback jika tidak ada transaksi
+
         $query = Transaction::with('Categories')
         ->where('user_id', Auth::id());      //mengambil sesuai id
 
@@ -32,12 +43,16 @@ class historyController extends Controller
 
             //filter bulan 1 untuk januari 2 untuk februari
             if ($request->filled('month')){
-                $query->where('created_at', $request->month);
+                $query->whereMonth('created_at', $request->month)
+                //Default ke tahun berjalan jika tahun tidak diisi
+                ->whereYear('created_at', $request->filled('year') 
+              ? $request->year 
+              : now()->year);
             }
 
             //filter tahun (ex: 2025)
             if($request->filled('year')){
-                $query->where('created_at', $request->year);
+                $query->whereYear('created_at', $request->year);
             }
 
             //mengatur sort by
@@ -51,6 +66,7 @@ class historyController extends Controller
         return Inertia::render('Transaksi/history', [
             'historys' => $transaksi,
             'categories' => $categories,
+            'years' => $years,
         ]);
     }
 }

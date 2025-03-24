@@ -4,10 +4,15 @@ import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
+import { computed, watch } from 'vue'
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 
-defineProps({
-    kategori: Object,
+const props = defineProps({
+    kategori: {
+        type: Array,
+        required: true,
+        default: () => []
+    }
 });
 
 const form = useForm({
@@ -17,7 +22,48 @@ const form = useForm({
     description: "",
 });
 
-console.log(form);
+
+// Computed property untuk format currency
+const formattedAmount = computed({
+    get: () => {
+        if (!form.amount) return ''
+        return new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+            maximumFractionDigits: 0
+        }).format(form.amount)
+    },
+    set: (value) => {
+        // Bersihkan karakter non-angka dan konversi ke number
+        const rawValue = parseInt(value.replace(/\D/g, '')) || 0
+        form.amount = rawValue
+    }
+})
+
+const filteredKategori = computed(() => {
+    return props.kategori.filter(item => item.type === form.type)
+})
+
+// Reset kategori jika tipe berubah
+watch(() => form.type, () => {
+  form.categories_id = ''
+
+// Computed property untuk format currency
+const formattedAmount = computed({
+    get: () => {
+        if (!form.amount) return ''
+        return new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+            maximumFractionDigits: 0
+        }).format(form.amount)
+    },
+    set: (value) => {
+        // Bersihkan karakter non-angka dan konversi ke number
+        const rawValue = parseInt(value.replace(/\D/g, '')) || 0
+        form.amount = rawValue
+    }
+})})
 
 const submit = () => {
     form.post(route("transaksi.store"));
@@ -53,8 +99,9 @@ const submit = () => {
                                     id="nominal"
                                     type="text"
                                     class="bg-gray-50 border mt-1 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-white dark:placeholder-gray-400 dark:text-headline dark:focus:ring-headline dark:focus:border-headline transition-all focus:text-white focus:bg-headline"
-                                    v-model="form.amount"
-                                    placeholder="Masukan Nominal"
+                                    v-model="formattedAmount" 
+                                    placeholder="Rp 0"
+                                    @keypress="handleNumberInput"
                                     autofocus
                                     autocomplete="name"
                                 />
@@ -75,7 +122,7 @@ const submit = () => {
                                             class="bg-gray-50 border mt-1 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-white dark:placeholder-gray-400 dark:text-headline dark:focus:ring-headline dark:focus:border-headline transition-all focus:text-white focus:bg-headline"
                                         >
                                             <option value="">
-                                                Pilih Kategori
+                                                Pilih Tipe
                                             </option>
                                             <option value="Income">
                                                 Pemasukan
@@ -107,11 +154,15 @@ const submit = () => {
                                                 Pilih Kategori
                                             </option>
                                             <option
-                                                v-for="k in kategori"
+                                                v-if="filteredKategori.length"
+                                                v-for="k in filteredKategori"
                                                 :key="k.id"
                                                 :value="k.id"
                                             >
                                                 {{ k.name }}
+                                            </option>
+                                            <option v-else disabled value="">
+                                                {{ form.type ? 'Tambah kategori dengan tombol + dibawah' : 'Pilih tipe terlebih dahulu' }}
                                             </option>
                                         </select>
 

@@ -11,6 +11,7 @@ use App\Models\AccountInfo;
 use App\Models\Transaction;
 use App\Models\Categories;
 use Illuminate\Support\Carbon;
+use Illuminate\Validation\Rule;
 
 class transaksiController extends Controller
 {
@@ -38,7 +39,7 @@ class transaksiController extends Controller
 
         //validasi request
         $request->validate([
-            'categories_id' => 'required|numeric',
+            'categories_id' => ['required', Rule::exists('categories', 'id')->where('type', $request->type)], //memastikan tipe kategori sama dengan tipe transaksi
             'amount' => 'required|numeric',
             'type' => 'required',
             'description' => 'required|string',
@@ -59,7 +60,6 @@ class transaksiController extends Controller
         }elseif($transaksi->type == 'Expense'){
             $account_info->balance -= $transaksi->amount;
         }
-
         $account_info->save();
 
         if($transaksi){
@@ -90,7 +90,6 @@ class transaksiController extends Controller
     {
         //
 
-       
         $request->validate([
             'categories_id' => 'numeric',
             'amount' => 'numeric',

@@ -7,14 +7,19 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 //Menerima data
 const props = defineProps({
     historys: Object,
-    categories: Object,
+    categories:  {
+        type: Array,
+        required: true,
+        default: () => []
+    },
+    years: Array,
 });
 
 //Memformat data agar lebih user friendly
 const formattedHistorys = computed(() => {
     return props.historys.data.map((history) => ({
         ...history,
-        formattedDate: dayjs(history.updated_at).format("DD-MM-YYYY HH:mm:ss"),
+        formattedDate: dayjs(history.created_at).format("DD-MM-YYYY HH:mm:ss"),
     }));
 });
 
@@ -75,10 +80,10 @@ const month = computed(() => {
     return monthNames.map((name, index) => ({ value: index + 1, name }));
 });
 
-const years = computed(() => {
-    const currentYear = new Date().getFullYear();
-    return Array.from({ length: 3 }, (_, i) => currentYear - i);
-});
+const filteredKategori = computed(() => {
+    if(!filters.value.type){ return props.categories}
+    return props.categories.filter(item => item.type === filters.value.type)
+})
 
 //update and delete buttons
 const updateHistory = (id) => {
@@ -116,24 +121,69 @@ const deleteHistory = (id) => {
             <div class="py-6">
             <div class="mx-auto max-w-7xl shadow-2xl">
 
-                <!-- Dropdown Sort By -->
-        <div class="flex items-center gap-2 mb-2">
-            <label class="text-sm font-medium">Sort By:</label>
-
-            <select v-model="filters.sort_by" @change="applySort" class="px-7 py-1 rounded">
+                <div class="flex items-center justify-between gap-4 mb-4">
+    <!-- Bagian Kiri (Sort) -->
+    <div class="flex items-center gap-4">
+        <div class="flex items-center gap-2">
+            <label class="text-sm font-medium text-gray-700">Sort By:</label>
+            <select 
+                v-model="filters.sort_by" 
+                @change="applySort"
+                class="pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+            >
                 <option value="created_at">Tanggal</option>
                 <option value="amount">Nominal</option>
             </select>
-
-            <select v-model="filters.sort_by" @change="applySort" class="px-7 py-1 rounded">
-                <option value="created_at">Asc</option>
-                <option value="amount">Desc</option>
-            </select>
-
-            <button @click="toggleSortOrder" class="px-3 py-1 border rounded bg-gray-200 hover:bg-gray-300">
-                {{ filters.sort_order === 'asc' ? 'Asc' : 'Desc' }}
-            </button>
         </div>
+
+        <div class="flex items-center gap-2">
+            <label class="text-sm font-medium text-gray-700">Order:</label>
+            <select 
+                v-model="filters.sort_order" 
+                @change="applySort"
+                class="pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+            >
+                <option value="asc">Asc</option>
+                <option value="desc">Desc</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Bagian Kanan (Filter Tahun & Bulan) -->
+    <div class="flex items-center gap-4">
+        <div class="flex-1 min-w-[150px]">
+            <select 
+                v-model="filters.year"
+                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+            >
+                <option value="">Semua Tahun</option>
+                <option 
+                    v-for="year in years" 
+                    :key="year"
+                    :value="year"
+                >
+                    {{ year }}
+                </option>
+            </select>
+        </div>
+
+        <div class="flex-1 min-w-[150px]">
+            <select 
+                v-model="filters.month"
+                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+            >
+                <option value="">Semua Bulan</option>
+                <option 
+                    v-for="item in month" 
+                    :key="item.value"
+                    :value="item.value"
+                >
+                    {{ item.name }}
+                </option>
+            </select>
+        </div>
+    </div>
+</div>
 
                 <div
                     class="overflow-hidden bg-white shadow-sm sm:rounded-lg"
@@ -166,15 +216,19 @@ const deleteHistory = (id) => {
                                             v-model="filters.categories_id"
                                             class="rounded-[32px] text-bold text-xs text-paragraph bg-headline border-none outline-none focus:ring-0 focus:border-transparent"
                                         >
-                                            <option value="">
+                                        <option value="">
                                                 Kategori (All)
                                             </option>
                                             <option
-                                                v-for="category in categories"
-                                                :key="category.id"
-                                                :value="category.id"
+                                                v-if="filteredKategori.length"
+                                                v-for="k in filteredKategori"
+                                                :key="k.id"
+                                                :value="k.id"
                                             >
-                                                {{ category.name }}
+                                                {{ k.name }}
+                                            </option>
+                                            <option v-else disabled value="">
+                                                {{ filters.type ? 'Tambah kategori dengan tombol + dibawah' : 'Pilih tipe terlebih dahulu' }}
                                             </option>
                                         </select>
                                     </th>

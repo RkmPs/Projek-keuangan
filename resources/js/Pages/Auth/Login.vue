@@ -82,9 +82,16 @@ const submit = () => {
 
             <div class="mt-4 flex items-center justify-end">
                 <Link
+                    :href="route('register')"
+                    class="rounded-md mr-24 text-sm text-black no-underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                >
+                    Register
+                </Link>
+
+                <Link
                     v-if="canResetPassword"
                     :href="route('password.request')"
-                    class="rounded-md text-sm text-black no-underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    class="rounded-md pl-4 text-sm text-black no-underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 >
                     Forgot your password?
                 </Link>

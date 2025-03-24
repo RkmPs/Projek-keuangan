@@ -11,19 +11,13 @@ use App\Http\Controllers\kategoriController;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+    return Inertia::render('Welcome');
+})->middleware('web');
 
 
 Route::middleware('auth')->group(function(){
 
     //Chart data
-    Route::get('/tes-chart', [chartController::class, 'testChart']);
     Route::get('/chart-data', [chartController::class, 'getChartData'])->name('chart-data');
     Route::get('/expense-data', [chartController::class, 'getExpenseData'])->name('expense-data');
     Route::get('/income-data', [chartController::class, 'getIncomeData'])->name('income-data');

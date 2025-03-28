@@ -2,7 +2,7 @@
 
 Projek ini dikerjakan untuk memenuhi tugas sekolah.
 Pada tugas ini, kelompok kami memilih untuk membuat web laporan keuangan. Kami menggunakan Laravel, Vue dan Inertia dalam pembuatannya.
-[Link video demo (Masih kosong)](http://handlebarsjs.com/)
+[Link video demo](https://youtu.be/-5V-yk6Z6HY)
 
 
 # Anggota Kelompok

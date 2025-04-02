@@ -6,7 +6,7 @@ Pada tugas ini, kelompok kami memilih untuk membuat web laporan keuangan. Kami m
 
 
 # Anggota Kelompok
-## XI RPL 1
+### XI RPL 1
 - M. Razzaq Athallah K.M.P sebagai Backend Dev (Laravel dan vue script setup)
 - M. Farel Atqiya sebagai Project Manager
 - Rafan Jaris Adytia  sebagai Frontend Dev (Perancangan UI/UX dan pembuatan laman)

@@ -129,7 +129,12 @@ onMounted(async () => {
                     </div>
 
                     <select
-                        class="border-none outline-none focus:ring-0 focus:border-transparent w-full"
+                        class="border-none outline-none focus:r
+                        
+                        
+                        
+                        
+                        ing-0 focus:border-transparent w-full"
                         v-model="filters.filter"
                     >
                         <option value="monthly">Bulan ini</option>
